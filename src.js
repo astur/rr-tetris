@@ -3,5 +3,12 @@ window.React = React
 import {render} from 'react-dom'
 
 render(
-  <h1>Tetris</h1>, document.querySelector('#container')
+    <div className="grid">
+        {
+            new Array(250).fill(null).map((v,i,a)=>{
+                return <div className="cell"></div>
+            })
+        }
+    </div>,
+    document.querySelector('#container')
 )

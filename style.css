@@ -1,0 +1,25 @@
+.cell {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    margin: 1px;
+    float: left;
+    text-align: center;
+    line-height: 20px;
+    font-style: bold;
+    font-size: 8px;
+    color: white;
+}
+
+.grid {
+    background-color: teal;
+    width: 220px;
+    height: 550px;
+    padding: 2px;
+    margin: auto;
+}
+
+body {
+    padding:10px;
+}
