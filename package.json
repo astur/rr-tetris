@@ -5,7 +5,8 @@
   "description": "Tetris on React-Reduce",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "browserify -t [ babelify --presets [ es2015 react ] ] src.js -o bundle.js"
+    "build": "browserify -t [ babelify --presets [ es2015 react ] ] src.js -o bundle.js",
+    "watch": "watchify -v -t [ babelify --presets [ es2015 react ] ] src.js -o bundle.js"
   },
   "keywords": [
     "tetris",
@@ -22,6 +23,7 @@
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
     "react-redux": "^4.4.5",
-    "redux": "^3.5.2"
+    "redux": "^3.5.2",
+    "watchify": "^3.7.0"
   }
 }
