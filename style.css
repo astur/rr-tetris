@@ -2,7 +2,6 @@
     display: inline-block;
     width: 20px;
     height: 20px;
-    background-color: red;
     margin: 1px;
     float: left;
     text-align: center;
@@ -10,6 +9,18 @@
     font-style: bold;
     font-size: 8px;
     color: white;
+}
+
+.empty {
+    background-color: red;
+}
+
+.full {
+    background-color: blue;
+}
+
+.active {
+    background-color: green;
 }
 
 .grid {

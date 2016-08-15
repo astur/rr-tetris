@@ -2,13 +2,48 @@ import React from 'react'
 window.React = React
 import {render} from 'react-dom'
 
-render(
-    <div className="grid">
-        {
-            new Array(250).fill(null).map((v,i,a)=>{
-                return <div className="cell"></div>
-            })
-        }
-    </div>,
+const cells = [
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,1,1,1,0,0,0],
+    [0,0,0,0,0,1,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,2,0,0,0,0,0,2,0,0],
+    [0,2,0,0,0,0,0,2,2,2],
+    [0,2,2,0,0,2,2,2,2,2],
+]
+
+const Tetris = React.createClass({
+    render: function() {
+        return (
+            <div className="grid">
+                {
+                    ([].concat(...this.props.cells)).map((v,i,a)=>{
+                        return <div className={'cell ' + ['empty' ,'full', 'active'][v]}></div>
+                    })
+                }
+            </div>
+        )
+    }
+})
+
+render(<Tetris cells={cells}/>,
     document.querySelector('#container')
 )
