@@ -44,7 +44,7 @@ const Tetris = React.createClass({
             <div className="grid">
                 {
                     ([].concat(...this.props.cells)).map((v,i,a)=>{
-                        return <div className={'cell ' + ['empty' ,'full', 'active'][v]}></div>
+                        return <div key={i} className={'cell ' + ['empty' ,'full', 'active'][v]}></div>
                     })
                 }
             </div>
