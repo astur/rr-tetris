@@ -4,35 +4,14 @@ import {connect, Provider} from 'react-redux'
 window.React = React
 import {render} from 'react-dom'
 
-const cells = [
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,1,1,1,0,0,0],
-    [0,0,0,0,0,1,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,2,0,0,0,0,0,2,0,0],
-    [0,2,0,0,0,0,0,2,2,2],
-    [0,2,2,0,0,2,2,2,2,2],
-]
+const initialState = {
+    cells: Array(25).fill(0).map(()=>Array(10).fill(0)),
+    position: null,
+    activePiece: null,
+    nextPiece: null,
+}
 
-function reducer(state = {cells}, action) {
+function reducer(state = initialState, action) {
     return state
 }
 
@@ -54,7 +33,7 @@ const Tetris = React.createClass({
 
 const RTetris = connect(
     function(state){
-        return state
+        return { cells: state.cells }
     }
 )(Tetris)
 
