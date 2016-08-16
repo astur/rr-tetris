@@ -12,13 +12,14 @@ const initialState = {
     position: null,
     activePiece: null,
     nextPiece: null,
+    gameOver: false,
 }
 
 function reducer(state = initialState, action) {
     let newPosition, pieceCells, isOK, newActivePiece
     switch (action.type) {
         case 'MOVE_LEFT':
-            if (state.position === null) {
+            if (state.position === null || state.gameOver === true) {
                 return state
             }
             newPosition = state.position.map((v, i) => i === 1 ? v : v - 1)
@@ -33,12 +34,13 @@ function reducer(state = initialState, action) {
                     position: newPosition,
                     activePiece: state.activePiece,
                     nextPiece: state.nextPiece,
+                    gameOver: false,
                 }
             } else {
                 return state
             }
         case 'MOVE_RIGHT':
-            if (state.position === null) {
+            if (state.position === null || state.gameOver === true) {
                 return state
             }
             newPosition = state.position.map((v, i) => i === 1 ? v : v + 1)
@@ -53,12 +55,13 @@ function reducer(state = initialState, action) {
                     position: newPosition,
                     activePiece: state.activePiece,
                     nextPiece: state.nextPiece,
+                    gameOver: false,
                 }
             } else {
                 return state
             }
         case 'ROTATE':
-            if (state.position === null) {
+            if (state.position === null || state.gameOver === true) {
                 return state
             }
             newActivePiece = pieces[state.activePiece].next
@@ -73,11 +76,15 @@ function reducer(state = initialState, action) {
                     position: state.position,
                     activePiece: newActivePiece,
                     nextPiece: state.nextPiece,
+                    gameOver: false,
                 }
             } else {
                 return state
             }
         case 'STEP':
+            if (state.gameOver === true) {
+                return state
+            }
             if (state.position === null) {
                 newActivePiece = state.nextPiece === null ? Math.floor(Math.random() * (19)) : state.nextPiece
                 pieceCells = pieces[newActivePiece].cells.map(v=>[v[0] + 5, v[1] + 1])
@@ -91,6 +98,7 @@ function reducer(state = initialState, action) {
                     position: [5, 1],
                     activePiece: newActivePiece,
                     nextPiece: Math.floor(Math.random() * (19)),
+                    gameOver: !isOK,
                 }
             } else {
                 newPosition = state.position.map((v, i) => i === 0 ? v : v + 1)
@@ -105,6 +113,7 @@ function reducer(state = initialState, action) {
                         position: newPosition,
                         activePiece: state.activePiece,
                         nextPiece: state.nextPiece,
+                        gameOver: false,
                     }
                 } else {
                     pieceCells = pieces[state.activePiece].cells.map(v => [v[0]+state.position[0], v[1]+state.position[1]])
@@ -112,12 +121,13 @@ function reducer(state = initialState, action) {
                         cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 1 : v === 2 ? 0 : v),
                         position: null,
                         activePiece: state.activePiece,
-                        nextPiece: state.nextPiece
+                        nextPiece: state.nextPiece,
+                        gameOver: false,
                     }
                 }
             }
         case 'DROP':
-            if (state.position === null) {
+            if (state.position === null || state.gameOver === true) {
                 return state
             }
             isOK = true
@@ -142,10 +152,20 @@ function reducer(state = initialState, action) {
                 position: null,
                 activePiece: state.activePiece,
                 nextPiece: state.nextPiece,
+                gameOver: false,
             }
         case 'RESTART':
-            // magic
-            return state
+            if (state.gameOver === false) {
+                return state
+            } else {
+                return {
+                    cells: Array(250).fill(0),
+                    position: null,
+                    activePiece: null,
+                    nextPiece: null,
+                    gameOver: false,
+                }
+            }
         default:
             return state
     }
