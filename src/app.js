@@ -18,6 +18,9 @@ function reducer(state = initialState, action) {
     let newPosition, pieceCells, isOK, newActivePiece
     switch (action.type) {
         case 'MOVE_LEFT':
+            if (state.position === null) {
+                return state
+            }
             newPosition = state.position.map((v, i) => i === 1 ? v : v - 1)
             pieceCells = pieces[state.activePiece].cells.map(v => [v[0]+newPosition[0], v[1]+newPosition[1]])
             isOK = (
@@ -35,6 +38,9 @@ function reducer(state = initialState, action) {
                 return state
             }
         case 'MOVE_RIGHT':
+            if (state.position === null) {
+                return state
+            }
             newPosition = state.position.map((v, i) => i === 1 ? v : v + 1)
             pieceCells = pieces[state.activePiece].cells.map(v => [v[0]+newPosition[0], v[1]+newPosition[1]])
             isOK = (
@@ -52,6 +58,9 @@ function reducer(state = initialState, action) {
                 return state
             }
         case 'ROTATE':
+            if (state.position === null) {
+                return state
+            }
             newActivePiece = pieces[state.activePiece].next
             pieceCells = pieces[newActivePiece].cells.map(v => [v[0]+state.position[0], v[1]+state.position[1]])
             isOK = (
@@ -109,8 +118,32 @@ function reducer(state = initialState, action) {
                 }
             }
         case 'DROP':
-            // magic
-            return state
+            if (state.position === null) {
+                return state
+            }
+            isOK = true
+            let offset = 0
+            while(isOK){
+                offset++
+                pieceCells = pieces[state.activePiece].cells.map(v => [v[0]+state.position[0], v[1]+state.position[1]+offset])
+                isOK = (
+                    pieceCells.filter(v => state.cells[v[1]*10 + v[0]]===1).length === 0 &&
+                    pieceCells.filter(v => v[1] > 24).length === 0
+                )
+            }
+            offset--
+            if (offset === 0) {
+                pieceCells = pieces[state.activePiece].cells.map(v => [v[0]+state.position[0], v[1]+state.position[1]])
+            } else {
+                newPosition = state.position.map((v, i) => i === 0 ? v : v + offset)
+                pieceCells = pieces[state.activePiece].cells.map(v => [v[0]+newPosition[0], v[1]+newPosition[1]])
+            }
+            return {
+                cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 1 : v === 2 ? 0 : v),
+                position: null,
+                activePiece: state.activePiece,
+                nextPiece: state.nextPiece,
+            }
         case 'RESTART':
             // magic
             return state
