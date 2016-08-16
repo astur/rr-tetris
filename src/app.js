@@ -77,7 +77,6 @@ function reducer(state = initialState, action) {
             } else {
                 return state
             }
-            return state
         case 'STEP':
             if (state.position === null) {
                 newActivePiece = state.nextPiece === null ? Math.floor(Math.random() * (19)) : state.nextPiece
