@@ -4,6 +4,8 @@ import {connect, Provider} from 'react-redux'
 window.React = React
 import {render} from 'react-dom'
 
+import Tetris from './tetris-component'
+
 const initialState = {
     cells: Array(25).fill(0).map(()=>Array(10).fill(0)),
     position: null,
@@ -16,20 +18,6 @@ function reducer(state = initialState, action) {
 }
 
 const store = createStore(reducer)
-
-const Tetris = React.createClass({
-    render: function() {
-        return (
-            <div className="grid">
-                {
-                    ([].concat(...this.props.cells)).map((v,i,a)=>{
-                        return <div key={i} className={'cell ' + ['empty' ,'full', 'active'][v]}></div>
-                    })
-                }
-            </div>
-        )
-    }
-})
 
 const RTetris = connect(
     function(state){
