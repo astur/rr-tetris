@@ -15,21 +15,65 @@ const initialState = {
 }
 
 function reducer(state = initialState, action) {
+    let newPosition, pieceCells, isOK, newActivePiece
     switch (action.type) {
         case 'MOVE_LEFT':
-            // magic
-            return state
+            newPosition = state.position.map((v, i) => i === 1 ? v : v - 1)
+            pieceCells = pieces[state.activePiece].cells.map(v => [v[0]+newPosition[0], v[1]+newPosition[1]])
+            isOK = (
+                pieceCells.filter(v => state.cells[v[1]*10 + v[0]]===1).length === 0 &&
+                pieceCells.filter(v => v[0] < 0).length === 0
+            )
+            if (isOK) {
+                return {
+                    cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
+                    position: newPosition,
+                    activePiece: state.activePiece,
+                    nextPiece: state.nextPiece,
+                }
+            } else {
+                return state
+            }
         case 'MOVE_RIGHT':
-            // magic
-            return state
+            newPosition = state.position.map((v, i) => i === 1 ? v : v + 1)
+            pieceCells = pieces[state.activePiece].cells.map(v => [v[0]+newPosition[0], v[1]+newPosition[1]])
+            isOK = (
+                pieceCells.filter(v => state.cells[v[1]*10 + v[0]]===1).length === 0 &&
+                pieceCells.filter(v => v[0] > 9).length === 0
+            )
+            if (isOK) {
+                return {
+                    cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
+                    position: newPosition,
+                    activePiece: state.activePiece,
+                    nextPiece: state.nextPiece,
+                }
+            } else {
+                return state
+            }
         case 'ROTATE':
-            // magic
+            newActivePiece = pieces[state.activePiece].next
+            pieceCells = pieces[newActivePiece].cells.map(v => [v[0]+state.position[0], v[1]+state.position[1]])
+            isOK = (
+                pieceCells.filter(v => state.cells[v[1]*10 + v[0]]===1).length === 0 &&
+                pieceCells.filter(v => v[0] > 9 || v[0] < 0 || v[1] < 0 || v[1] > 24).length === 0
+            )
+            if (isOK) {
+                return {
+                    cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
+                    position: state.position,
+                    activePiece: newActivePiece,
+                    nextPiece: state.nextPiece,
+                }
+            } else {
+                return state
+            }
             return state
         case 'STEP':
             if (state.position === null) {
-                let activePiece = state.nextPiece === null ? Math.floor(Math.random() * (19)) : state.nextPiece
-                let pieceCells = pieces[activePiece].cells.map(v=>[v[0] + 5, v[1] + 1])
-                let isOK = pieceCells.filter(v => state.cells[v[1]*10 + v[0]]===1).length === 0
+                newActivePiece = state.nextPiece === null ? Math.floor(Math.random() * (19)) : state.nextPiece
+                pieceCells = pieces[newActivePiece].cells.map(v=>[v[0] + 5, v[1] + 1])
+                isOK = pieceCells.filter(v => state.cells[v[1]*10 + v[0]]===1).length === 0
                 if (!isOK) {
                     //clearInterval ...
                     alert('GAME OVER!')
@@ -37,13 +81,13 @@ function reducer(state = initialState, action) {
                 return {
                     cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
                     position: [5, 1],
-                    activePiece: activePiece,
+                    activePiece: newActivePiece,
                     nextPiece: Math.floor(Math.random() * (19)),
                 }
             } else {
-                let newPosition = state.position.map((v, i) => i === 0 ? v : v + 1)
-                let pieceCells = pieces[state.activePiece].cells.map(v => [v[0]+newPosition[0], v[1]+newPosition[1]])
-                let isOK = (
+                newPosition = state.position.map((v, i) => i === 0 ? v : v + 1)
+                pieceCells = pieces[state.activePiece].cells.map(v => [v[0]+newPosition[0], v[1]+newPosition[1]])
+                isOK = (
                     pieceCells.filter(v => state.cells[v[1]*10 + v[0]]===1).length === 0 &&
                     pieceCells.filter(v => v[1] > 24).length === 0
                 )
@@ -55,7 +99,7 @@ function reducer(state = initialState, action) {
                         nextPiece: state.nextPiece,
                     }
                 } else {
-                    let pieceCells = pieces[state.activePiece].cells.map(v => [v[0]+state.position[0], v[1]+state.position[1]])
+                    pieceCells = pieces[state.activePiece].cells.map(v => [v[0]+state.position[0], v[1]+state.position[1]])
                     return {
                         cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 1 : v === 2 ? 0 : v),
                         position: null,
