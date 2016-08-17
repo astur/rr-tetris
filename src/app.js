@@ -14,6 +14,7 @@ const initialState = {
     nextPiece: null,
     gameOver: false,
     paused: false,
+    count: 0,
 }
 
 function reducer(state = initialState, action) {
@@ -37,6 +38,7 @@ function reducer(state = initialState, action) {
                     nextPiece: state.nextPiece,
                     gameOver: false,
                     paused: false,
+                    count: state.count,
                 }
             } else {
                 return state
@@ -59,6 +61,7 @@ function reducer(state = initialState, action) {
                     nextPiece: state.nextPiece,
                     gameOver: false,
                     paused: false,
+                    count: state.count,
                 }
             } else {
                 return state
@@ -81,6 +84,7 @@ function reducer(state = initialState, action) {
                     nextPiece: state.nextPiece,
                     gameOver: false,
                     paused: false,
+                    count: state.count,
                 }
             } else {
                 return state
@@ -103,6 +107,7 @@ function reducer(state = initialState, action) {
                     nextPiece: state.nextPiece,
                     gameOver: false,
                     paused: false,
+                    count: state.count,
                 }
             } else {
                 return state
@@ -126,6 +131,7 @@ function reducer(state = initialState, action) {
                     nextPiece: Math.floor(Math.random() * (19)),
                     gameOver: !isOK,
                     paused: false,
+                    count: state.count,
                 }
             } else {
                 newPosition = state.position.map((v, i) => i === 0 ? v : v + 1)
@@ -142,6 +148,7 @@ function reducer(state = initialState, action) {
                         nextPiece: state.nextPiece,
                         gameOver: false,
                         paused: false,
+                        count: state.count,
                     }
                 } else {
                     pieceCells = pieces[state.activePiece].cells.map(v => [v[0]+state.position[0], v[1]+state.position[1]])
@@ -152,6 +159,7 @@ function reducer(state = initialState, action) {
                         nextPiece: state.nextPiece,
                         gameOver: false,
                         paused: false,
+                        count: state.count,
                     }
                 }
             }
@@ -184,6 +192,7 @@ function reducer(state = initialState, action) {
                 nextPiece: state.nextPiece,
                 gameOver: false,
                 paused: false,
+                count: state.count,
             }
         case 'RESTART':
             if (state.gameOver === false) {
@@ -196,6 +205,7 @@ function reducer(state = initialState, action) {
                     nextPiece: null,
                     gameOver: false,
                     paused: false,
+                    count: 0,
                 }
             }
         case 'PAUSE':
@@ -209,20 +219,24 @@ function reducer(state = initialState, action) {
                     nextPiece: state.nextPiece,
                     gameOver: state.gameOver,
                     paused: !state.paused,
+                    count: state.count,
                 }
             }
         case 'CLEAR':
             if (state.position === null || state.gameOver === true || state.paused === true) {
                 return state
             } else {
-                let cellRows = [].concat(...Array(25).fill(0).map((_,i) => state.cells.slice(i*10, i*10+10)).filter(V => !(V.every(v => v === 1))))
+                let cellRows = Array(25).fill(0).map((_,i) => state.cells.slice(i*10, i*10+10)).filter(V => !(V.every(v => v === 1)))
+                let newCells = [].concat(...cellRows)
+                let count = state.count + 25 - cellRows.length
                 return {
-                    cells: [].concat(Array(250 - cellRows.length).fill(0), ...cellRows),
+                    cells: [].concat(Array(250 - newCells.length).fill(0), ...newCells),
                     position: state.position,
                     activePiece: state.activePiece,
                     nextPiece: state.nextPiece,
                     gameOver: state.gameOver,
                     paused: state.paused,
+                    count: count,
                 }
             }
         default:
@@ -236,7 +250,7 @@ window.store = store //// FOR DEBUG
 
 const RTetris = connect(
     function(state){
-        return { cells: state.cells }
+        return { cells: state.cells, count: state.count }
     }
 )(Tetris)
 
