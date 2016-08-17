@@ -1,16 +1,5 @@
 import pieces from './pieces.js'
 
-const initialState = {
-    cells: Array(250).fill(0),
-    nextCells: Array(49).fill(0),
-    position: null,
-    activePiece: null,
-    nextPiece: null,
-    gameOver: false,
-    paused: false,
-    count: 0,
-}
-
 function reducer(state = initialState, action) {
     let newPosition, pieceCells, isOK, newActivePiece, newNextPiece, newNextCells
     switch (action.type) {
