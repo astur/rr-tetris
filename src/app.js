@@ -276,13 +276,19 @@ const RTetrisNextPiece = connect(
 
 const RDashboard = connect(
     function(state){
-        return { count: state.count }
+        return {
+            count: state.count,
+            paused: state.paused,
+            gameOver: state.gameOver,
+        }
     }
 )(
     React.createClass({
         render: function() {
             return (
                 <div className="dashboard">
+                    <h1>{this.props.gameOver ? 'Game over!' : ''}</h1>
+                    <h1>{this.props.paused ? 'PAUSE' : ''}</h1>
                     <h1>Score: {this.props.count}</h1>
                 </div>
             )
