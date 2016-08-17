@@ -168,6 +168,7 @@ function reducer(state = initialState, action) {
                 newPosition = state.position.map((v, i) => i === 0 ? v : v + offset)
                 pieceCells = pieces[state.activePiece].cells.map(v => [v[0]+newPosition[0], v[1]+newPosition[1]])
             }
+            restart()
             return {
                 cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 1 : v === 2 ? 0 : v),
                 position: null,
@@ -223,6 +224,16 @@ document.onkeydown = function(e) {
     return false
 }
 
-let timer = setInterval(()=>{
+let timer
+
+function start(){
     store.dispatch({type: 'STEP'})
-}, 1000)
+    timer = setTimeout(start, 1000)
+}
+
+function restart(){
+    clearInterval(timer)
+    timer = setTimeout(start, 0)
+}
+
+start()
