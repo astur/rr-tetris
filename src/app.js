@@ -274,6 +274,22 @@ const RTetrisNextPiece = connect(
     }
 )(Tetris)
 
+const RDashboard = connect(
+    function(state){
+        return { count: state.count }
+    }
+)(
+    React.createClass({
+        render: function() {
+            return (
+                <div className="dashboard">
+                    <h1>Score: {this.props.count}</h1>
+                </div>
+            )
+        }
+    })
+)
+
 render(
   <Provider store={store}>
     <div>
@@ -281,6 +297,7 @@ render(
             <RTetris/>
         </div>  
         <div className="right">
+            <RDashboard/>
             <RTetrisNextPiece/>
         </div>  
     </div>  
