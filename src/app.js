@@ -13,13 +13,14 @@ const initialState = {
     activePiece: null,
     nextPiece: null,
     gameOver: false,
+    paused: false,
 }
 
 function reducer(state = initialState, action) {
     let newPosition, pieceCells, isOK, newActivePiece
     switch (action.type) {
         case 'MOVE_LEFT':
-            if (state.position === null || state.gameOver === true) {
+            if (state.position === null || state.gameOver === true || state.paused === true) {
                 return state
             }
             newPosition = state.position.map((v, i) => i === 1 ? v : v - 1)
@@ -35,12 +36,13 @@ function reducer(state = initialState, action) {
                     activePiece: state.activePiece,
                     nextPiece: state.nextPiece,
                     gameOver: false,
+                    paused: false,
                 }
             } else {
                 return state
             }
         case 'MOVE_RIGHT':
-            if (state.position === null || state.gameOver === true) {
+            if (state.position === null || state.gameOver === true || state.paused === true) {
                 return state
             }
             newPosition = state.position.map((v, i) => i === 1 ? v : v + 1)
@@ -56,12 +58,13 @@ function reducer(state = initialState, action) {
                     activePiece: state.activePiece,
                     nextPiece: state.nextPiece,
                     gameOver: false,
+                    paused: false,
                 }
             } else {
                 return state
             }
         case 'MOVE_DOWN':
-            if (state.position === null || state.gameOver === true) {
+            if (state.position === null || state.gameOver === true || state.paused === true) {
                 return state
             }
             newPosition = state.position.map((v, i) => i === 0 ? v : v + 1)
@@ -77,12 +80,13 @@ function reducer(state = initialState, action) {
                     activePiece: state.activePiece,
                     nextPiece: state.nextPiece,
                     gameOver: false,
+                    paused: false,
                 }
             } else {
                 return state
             }
         case 'ROTATE':
-            if (state.position === null || state.gameOver === true) {
+            if (state.position === null || state.gameOver === true || state.paused === true) {
                 return state
             }
             newActivePiece = pieces[state.activePiece].next
@@ -98,12 +102,13 @@ function reducer(state = initialState, action) {
                     activePiece: newActivePiece,
                     nextPiece: state.nextPiece,
                     gameOver: false,
+                    paused: false,
                 }
             } else {
                 return state
             }
         case 'STEP':
-            if (state.gameOver === true) {
+            if (state.gameOver === true || state.paused === true) {
                 return state
             }
             if (state.position === null) {
@@ -120,6 +125,7 @@ function reducer(state = initialState, action) {
                     activePiece: newActivePiece,
                     nextPiece: Math.floor(Math.random() * (19)),
                     gameOver: !isOK,
+                    paused: false,
                 }
             } else {
                 newPosition = state.position.map((v, i) => i === 0 ? v : v + 1)
@@ -135,6 +141,7 @@ function reducer(state = initialState, action) {
                         activePiece: state.activePiece,
                         nextPiece: state.nextPiece,
                         gameOver: false,
+                        paused: false,
                     }
                 } else {
                     pieceCells = pieces[state.activePiece].cells.map(v => [v[0]+state.position[0], v[1]+state.position[1]])
@@ -144,11 +151,12 @@ function reducer(state = initialState, action) {
                         activePiece: state.activePiece,
                         nextPiece: state.nextPiece,
                         gameOver: false,
+                        paused: false,
                     }
                 }
             }
         case 'DROP':
-            if (state.position === null || state.gameOver === true) {
+            if (state.position === null || state.gameOver === true || state.paused === true) {
                 return state
             }
             isOK = true
@@ -175,6 +183,7 @@ function reducer(state = initialState, action) {
                 activePiece: state.activePiece,
                 nextPiece: state.nextPiece,
                 gameOver: false,
+                paused: false,
             }
         case 'RESTART':
             if (state.gameOver === false) {
@@ -186,6 +195,20 @@ function reducer(state = initialState, action) {
                     activePiece: null,
                     nextPiece: null,
                     gameOver: false,
+                    paused: false,
+                }
+            }
+        case 'PAUSE':
+            if (state.gameOver === true) {
+                return state
+            } else {
+                return {
+                    cells: state.cells,
+                    position: state.position,
+                    activePiece: state.activePiece,
+                    nextPiece: state.nextPiece,
+                    gameOver: state.gameOver,
+                    paused: !state.paused,
                 }
             }
         default:
@@ -218,6 +241,7 @@ document.onkeydown = function(e) {
         38: 'ROTATE', //up arrow
         32: 'DROP', //space
         27: 'RESTART', //esc
+        80: 'PAUSE', //P - pause
     }
     let action = actions[e.keyCode]
     action && store.dispatch({type: action})
