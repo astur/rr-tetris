@@ -60,6 +60,27 @@ function reducer(state = initialState, action) {
             } else {
                 return state
             }
+        case 'MOVE_DOWN':
+            if (state.position === null || state.gameOver === true) {
+                return state
+            }
+            newPosition = state.position.map((v, i) => i === 0 ? v : v + 1)
+            pieceCells = pieces[state.activePiece].cells.map(v => [v[0]+newPosition[0], v[1]+newPosition[1]])
+            isOK = (
+                pieceCells.filter(v => state.cells[v[1]*10 + v[0]]===1).length === 0 &&
+                pieceCells.filter(v => v[1] > 24).length === 0
+            )
+            if (isOK) {
+                return {
+                    cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
+                    position: newPosition,
+                    activePiece: state.activePiece,
+                    nextPiece: state.nextPiece,
+                    gameOver: false,
+                }
+            } else {
+                return state
+            }
         case 'ROTATE':
             if (state.position === null || state.gameOver === true) {
                 return state
@@ -192,6 +213,7 @@ document.onkeydown = function(e) {
     const actions = {
         37: 'MOVE_LEFT', //left arrow
         39: 'MOVE_RIGHT', //right arrow
+        40: 'MOVE_DOWN', //right arrow
         38: 'ROTATE', //up arrow
         32: 'DROP', //space
         27: 'RESTART', //esc
