@@ -211,6 +211,20 @@ function reducer(state = initialState, action) {
                     paused: !state.paused,
                 }
             }
+        case 'CLEAR':
+            if (state.position === null || state.gameOver === true || state.paused === true) {
+                return state
+            } else {
+                let cellRows = [].concat(...Array(25).fill(0).map((_,i) => state.cells.slice(i*10, i*10+10)).filter(V => !(V.every(v => v === 1))))
+                return {
+                    cells: [].concat(Array(250 - cellRows.length).fill(0), ...cellRows),
+                    position: state.position,
+                    activePiece: state.activePiece,
+                    nextPiece: state.nextPiece,
+                    gameOver: state.gameOver,
+                    paused: state.paused,
+                }
+            }
         default:
             return state
     }
@@ -253,6 +267,7 @@ let timer
 function start(){
     store.dispatch({type: 'STEP'})
     timer = setTimeout(start, 1000)
+    setTimeout(() => store.dispatch({type: 'CLEAR'}), 100)
 }
 
 function restart(){
