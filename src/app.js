@@ -187,3 +187,20 @@ render(
   </Provider>,
   document.querySelector('#container')
 )
+
+document.onkeydown = function(e) {
+    const actions = {
+        37: 'MOVE_LEFT', //left arrow
+        39: 'MOVE_RIGHT', //right arrow
+        38: 'ROTATE', //up arrow
+        32: 'DROP', //space
+        27: 'RESTART', //esc
+    }
+    let action = actions[e.keyCode]
+    action && store.dispatch({type: action})
+    return false
+}
+
+let timer = setInterval(()=>{
+    store.dispatch({type: 'STEP'})
+}, 1000)
