@@ -9,6 +9,7 @@ import pieces from './pieces.js'
 
 const initialState = {
     cells: Array(250).fill(0),
+    nextCells: Array(49).fill(0),
     position: null,
     activePiece: null,
     nextPiece: null,
@@ -18,7 +19,7 @@ const initialState = {
 }
 
 function reducer(state = initialState, action) {
-    let newPosition, pieceCells, isOK, newActivePiece
+    let newPosition, pieceCells, isOK, newActivePiece, newNextPiece, newNextCells
     switch (action.type) {
         case 'MOVE_LEFT':
             if (state.position === null || state.gameOver === true || state.paused === true) {
@@ -33,6 +34,7 @@ function reducer(state = initialState, action) {
             if (isOK) {
                 return {
                     cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
+                    nextCells: state.nextCells,
                     position: newPosition,
                     activePiece: state.activePiece,
                     nextPiece: state.nextPiece,
@@ -56,6 +58,7 @@ function reducer(state = initialState, action) {
             if (isOK) {
                 return {
                     cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
+                    nextCells: state.nextCells,
                     position: newPosition,
                     activePiece: state.activePiece,
                     nextPiece: state.nextPiece,
@@ -79,6 +82,7 @@ function reducer(state = initialState, action) {
             if (isOK) {
                 return {
                     cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
+                    nextCells: state.nextCells,
                     position: newPosition,
                     activePiece: state.activePiece,
                     nextPiece: state.nextPiece,
@@ -102,6 +106,7 @@ function reducer(state = initialState, action) {
             if (isOK) {
                 return {
                     cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
+                    nextCells: state.nextCells,
                     position: state.position,
                     activePiece: newActivePiece,
                     nextPiece: state.nextPiece,
@@ -119,6 +124,8 @@ function reducer(state = initialState, action) {
             if (state.position === null) {
                 newActivePiece = state.nextPiece === null ? Math.floor(Math.random() * (19)) : state.nextPiece
                 pieceCells = pieces[newActivePiece].cells.map(v=>[v[0] + 5, v[1] + 1])
+                newNextPiece = Math.floor(Math.random() * (19))
+                newNextCells = pieces[newNextPiece].cells.map(v => [v[0] + 3, v[1] + 3])
                 isOK = pieceCells.filter(v => state.cells[v[1]*10 + v[0]]===1).length === 0
                 if (!isOK) {
                     //clearInterval ...
@@ -126,9 +133,10 @@ function reducer(state = initialState, action) {
                 }
                 return {
                     cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
+                    nextCells: state.nextCells.map((v, i) => newNextCells.filter((v) => (v[1]*7 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
                     position: [5, 1],
                     activePiece: newActivePiece,
-                    nextPiece: Math.floor(Math.random() * (19)),
+                    nextPiece: newNextPiece,
                     gameOver: !isOK,
                     paused: false,
                     count: state.count,
@@ -143,6 +151,7 @@ function reducer(state = initialState, action) {
                 if(isOK){
                     return {
                         cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
+                        nextCells: state.nextCells,
                         position: newPosition,
                         activePiece: state.activePiece,
                         nextPiece: state.nextPiece,
@@ -154,6 +163,7 @@ function reducer(state = initialState, action) {
                     pieceCells = pieces[state.activePiece].cells.map(v => [v[0]+state.position[0], v[1]+state.position[1]])
                     return {
                         cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 1 : v === 2 ? 0 : v),
+                        nextCells: state.nextCells,
                         position: null,
                         activePiece: state.activePiece,
                         nextPiece: state.nextPiece,
@@ -187,6 +197,7 @@ function reducer(state = initialState, action) {
             restart()
             return {
                 cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 1 : v === 2 ? 0 : v),
+                nextCells: state.nextCells,
                 position: null,
                 activePiece: state.activePiece,
                 nextPiece: state.nextPiece,
@@ -200,9 +211,10 @@ function reducer(state = initialState, action) {
             } else {
                 return {
                     cells: Array(250).fill(0),
+                    nextCells: state.nextCells,
                     position: null,
                     activePiece: null,
-                    nextPiece: null,
+                    nextPiece: state.nextPiece,
                     gameOver: false,
                     paused: false,
                     count: 0,
@@ -214,6 +226,7 @@ function reducer(state = initialState, action) {
             } else {
                 return {
                     cells: state.cells,
+                    nextCells: state.nextCells,
                     position: state.position,
                     activePiece: state.activePiece,
                     nextPiece: state.nextPiece,
@@ -231,6 +244,7 @@ function reducer(state = initialState, action) {
                 let count = state.count + 25 - cellRows.length
                 return {
                     cells: [].concat(Array(250 - newCells.length).fill(0), ...newCells),
+                    nextCells: state.nextCells,
                     position: state.position,
                     activePiece: state.activePiece,
                     nextPiece: state.nextPiece,
@@ -250,14 +264,27 @@ window.store = store //// FOR DEBUG
 
 const RTetris = connect(
     function(state){
-        return { cells: state.cells, count: state.count }
+        return { cells: state.cells }
+    }
+)(Tetris)
+
+const RTetrisNextPiece = connect(
+    function(state){
+        return { cells: state.nextCells }
     }
 )(Tetris)
 
 render(
   <Provider store={store}>
-    <RTetris/>
-  </Provider>,
+    <div>
+        <div className="left">
+            <RTetris/>
+        </div>  
+        <div className="right">
+            <RTetrisNextPiece/>
+        </div>  
+    </div>  
+    </Provider>,
   document.querySelector('#container')
 )
 

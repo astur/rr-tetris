@@ -25,12 +25,25 @@
 
 .grid {
     background-color: teal;
+    padding: 2px;
+}
+
+.left .grid {
+    margin: auto;
     width: 220px;
     height: 550px;
-    padding: 2px;
-    margin: auto;
+}
+
+.right .grid {
+    width: 154px;
+    height: 154px;
 }
 
 body {
     padding:10px;
+}
+
+.left, .right {
+    width: 50%;
+    float: left;
 }
