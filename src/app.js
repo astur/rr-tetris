@@ -1,7 +1,6 @@
 import React from 'react'
 import {createStore} from 'redux'
 import {connect, Provider} from 'react-redux'
-window.React = React
 import {render} from 'react-dom'
 
 import Tetris from './tetris-component'
@@ -20,8 +19,6 @@ const initialState = {
 }
 
 const store = createStore(reducer, initialState)
-
-window.store = store //// FOR DEBUG
 
 const RTetris = connect(
     function(state){

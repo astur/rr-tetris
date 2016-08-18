@@ -84,18 +84,13 @@ function reducer(state = initialState, action) {
                 pieceCells = pieces[newActivePiece].cells.map(v=>[v[0] + 5, v[1] + 1])
                 newNextPiece = Math.floor(Math.random() * (19))
                 newNextCells = pieces[newNextPiece].cells.map(v => [v[0] + 3, v[1] + 3])
-                isOK = pieceCells.filter(v => state.cells[v[1]*10 + v[0]]===1).length === 0
-                if (!isOK) {
-                    //clearInterval ...
-                    alert('GAME OVER!')
-                }
                 return Object.assign({}, state, {
                     cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
                     nextCells: state.nextCells.map((v, i) => newNextCells.filter((v) => (v[1]*7 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
                     position: [5, 1],
                     activePiece: newActivePiece,
                     nextPiece: newNextPiece,
-                    gameOver: !isOK,
+                    gameOver: !(pieceCells.filter(v => state.cells[v[1]*10 + v[0]]===1).length === 0),
                 })
             } else {
                 newPosition = state.position.map((v, i) => i === 0 ? v : v + 1)
