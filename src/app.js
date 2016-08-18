@@ -77,11 +77,13 @@ document.onkeydown = function(e) {
 }
 
 let timer
+let delay = 1000
 
 function start(){
     store.dispatch({type: 'STEP'})
-    timer = setTimeout(start, 1000)
+    timer = setTimeout(start, delay)
     setTimeout(() => store.dispatch({type: 'CLEAR'}), 100)
+    delay > 300 && delay--
 }
 
 start()
