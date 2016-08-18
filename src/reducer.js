@@ -14,16 +14,10 @@ function reducer(state = initialState, action) {
                 pieceCells.filter(v => v[0] < 0).length === 0
             )
             if (isOK) {
-                return {
+                return Object.assign({}, state, {
                     cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
-                    nextCells: state.nextCells,
                     position: newPosition,
-                    activePiece: state.activePiece,
-                    nextPiece: state.nextPiece,
-                    gameOver: false,
-                    paused: false,
-                    count: state.count,
-                }
+                })
             } else {
                 return state
             }
@@ -38,16 +32,10 @@ function reducer(state = initialState, action) {
                 pieceCells.filter(v => v[0] > 9).length === 0
             )
             if (isOK) {
-                return {
+                return Object.assign({}, state, {
                     cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
-                    nextCells: state.nextCells,
                     position: newPosition,
-                    activePiece: state.activePiece,
-                    nextPiece: state.nextPiece,
-                    gameOver: false,
-                    paused: false,
-                    count: state.count,
-                }
+                })
             } else {
                 return state
             }
@@ -62,16 +50,10 @@ function reducer(state = initialState, action) {
                 pieceCells.filter(v => v[1] > 24).length === 0
             )
             if (isOK) {
-                return {
+                return Object.assign({}, state, {
                     cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
-                    nextCells: state.nextCells,
                     position: newPosition,
-                    activePiece: state.activePiece,
-                    nextPiece: state.nextPiece,
-                    gameOver: false,
-                    paused: false,
-                    count: state.count,
-                }
+                })
             } else {
                 return state
             }
@@ -86,16 +68,10 @@ function reducer(state = initialState, action) {
                 pieceCells.filter(v => v[0] > 9 || v[0] < 0 || v[1] < 0 || v[1] > 24).length === 0
             )
             if (isOK) {
-                return {
+                return Object.assign({}, state, {
                     cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
-                    nextCells: state.nextCells,
-                    position: state.position,
                     activePiece: newActivePiece,
-                    nextPiece: state.nextPiece,
-                    gameOver: false,
-                    paused: false,
-                    count: state.count,
-                }
+                })
             } else {
                 return state
             }
@@ -113,16 +89,14 @@ function reducer(state = initialState, action) {
                     //clearInterval ...
                     alert('GAME OVER!')
                 }
-                return {
+                return Object.assign({}, state, {
                     cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
                     nextCells: state.nextCells.map((v, i) => newNextCells.filter((v) => (v[1]*7 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
                     position: [5, 1],
                     activePiece: newActivePiece,
                     nextPiece: newNextPiece,
                     gameOver: !isOK,
-                    paused: false,
-                    count: state.count,
-                }
+                })
             } else {
                 newPosition = state.position.map((v, i) => i === 0 ? v : v + 1)
                 pieceCells = pieces[state.activePiece].cells.map(v => [v[0]+newPosition[0], v[1]+newPosition[1]])
@@ -131,28 +105,16 @@ function reducer(state = initialState, action) {
                     pieceCells.filter(v => v[1] > 24).length === 0
                 )
                 if(isOK){
-                    return {
+                    return Object.assign({}, state, {
                         cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 2 : v === 2 ? 0 : v),
-                        nextCells: state.nextCells,
                         position: newPosition,
-                        activePiece: state.activePiece,
-                        nextPiece: state.nextPiece,
-                        gameOver: false,
-                        paused: false,
-                        count: state.count,
-                    }
+                    })
                 } else {
                     pieceCells = pieces[state.activePiece].cells.map(v => [v[0]+state.position[0], v[1]+state.position[1]])
-                    return {
+                    return Object.assign({}, state, {
                         cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 1 : v === 2 ? 0 : v),
-                        nextCells: state.nextCells,
                         position: null,
-                        activePiece: state.activePiece,
-                        nextPiece: state.nextPiece,
-                        gameOver: false,
-                        paused: false,
-                        count: state.count,
-                    }
+                    })
                 }
             }
         case 'DROP':
@@ -176,45 +138,30 @@ function reducer(state = initialState, action) {
                 newPosition = state.position.map((v, i) => i === 0 ? v : v + offset)
                 pieceCells = pieces[state.activePiece].cells.map(v => [v[0]+newPosition[0], v[1]+newPosition[1]])
             }
-            return {
+            return Object.assign({}, state, {
                 cells: state.cells.map((v, i) => pieceCells.filter((v) => (v[1]*10 + v[0] === i)).length > 0 ? 1 : v === 2 ? 0 : v),
-                nextCells: state.nextCells,
                 position: null,
-                activePiece: state.activePiece,
-                nextPiece: state.nextPiece,
-                gameOver: false,
-                paused: false,
-                count: state.count,
-            }
+            })
         case 'RESTART':
             if (state.gameOver === false) {
                 return state
             } else {
-                return {
+                return Object.assign({}, state, {
                     cells: Array(250).fill(0),
-                    nextCells: state.nextCells,
                     position: null,
-                    activePiece: null,
-                    nextPiece: state.nextPiece,
+                    // activePiece: null,
                     gameOver: false,
                     paused: false,
                     count: 0,
-                }
+                })
             }
         case 'PAUSE':
             if (state.gameOver === true) {
                 return state
             } else {
-                return {
-                    cells: state.cells,
-                    nextCells: state.nextCells,
-                    position: state.position,
-                    activePiece: state.activePiece,
-                    nextPiece: state.nextPiece,
-                    gameOver: state.gameOver,
+                return Object.assign({}, state, {
                     paused: !state.paused,
-                    count: state.count,
-                }
+                })
             }
         case 'CLEAR':
             if (state.position === null || state.gameOver === true || state.paused === true) {
@@ -223,16 +170,10 @@ function reducer(state = initialState, action) {
                 let cellRows = Array(25).fill(0).map((_,i) => state.cells.slice(i*10, i*10+10)).filter(V => !(V.every(v => v === 1)))
                 let newCells = [].concat(...cellRows)
                 let count = state.count + 25 - cellRows.length
-                return {
+                return Object.assign({}, state, {
                     cells: [].concat(Array(250 - newCells.length).fill(0), ...newCells),
-                    nextCells: state.nextCells,
-                    position: state.position,
-                    activePiece: state.activePiece,
-                    nextPiece: state.nextPiece,
-                    gameOver: state.gameOver,
-                    paused: state.paused,
                     count: count,
-                }
+                })
             }
         default:
             return state
