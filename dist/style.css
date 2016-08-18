@@ -8,23 +8,22 @@
     line-height: 20px;
     font-style: bold;
     font-size: 8px;
-    color: white;
 }
 
 .empty {
-    background-color: red;
+    background-color: #80a090;
 }
 
 .full {
-    background-color: blue;
+    background-color: #30f7A1;
 }
 
 .active {
-    background-color: green;
+    background-color: #60b0Ff;
 }
 
 .grid {
-    background-color: teal;
+    background-color: #182429;
     padding: 2px;
 }
 
@@ -40,7 +39,9 @@
 }
 
 body {
-    padding:10px;
+    padding:50px;
+    background: #d0d0c0;
+    color: #582429;
 }
 
 .left, .right {
