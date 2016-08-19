@@ -51,6 +51,13 @@ render(
         <div className="right">
             <RDashboard/>
             <RTetrisNextPiece/>
+            <h3>Rules:</h3>
+            <p>⇐ ⇒ – move left/right</p>
+            <p>⇑ – rotate</p>
+            <p>⇓ – move down</p>
+            <p>space – drop</p>
+            <p>P – pause on/off</p>
+            <p>ESC – restart after gameover</p>
         </div>  
     </div>  
     </Provider>,
