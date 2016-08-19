@@ -82,7 +82,8 @@ let delay = 1000
 function start(){
     store.dispatch({type: 'STEP'})
     timer = setTimeout(start, delay)
-    setTimeout(() => store.dispatch({type: 'CLEAR'}), 100)
+    setTimeout(() => store.dispatch({type: 'HILIGHT'}), 50)
+    setTimeout(() => store.dispatch({type: 'CLEAR'}), 150)
     delay > 300 && delay--
 }
 

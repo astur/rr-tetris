@@ -162,12 +162,20 @@ function reducer(state = initialState, action) {
             if (state.position === null || state.gameOver === true || state.paused === true) {
                 return state
             } else {
-                let cellRows = Array(25).fill(0).map((_,i) => state.cells.slice(i*10, i*10+10)).filter(V => !(V.every(v => v === 1)))
-                let newCells = [].concat(...cellRows)
-                let count = state.count + 25 - cellRows.length
+                let newCells = state.cells.filter(v => v !== 3)
+                let count = state.count + 25 - (newCells.length / 10)
                 return Object.assign({}, state, {
                     cells: [].concat(Array(250 - newCells.length).fill(0), ...newCells),
                     count: count,
+                })
+            }
+        case 'HILIGHT':
+            if (state.position === null || state.gameOver === true || state.paused === true) {
+                return state
+            } else {
+                let cellRows = Array(25).fill(0).map((_,i) => state.cells.slice(i*10, i*10+10))
+                return Object.assign({}, state, {
+                    cells: [].concat(...(cellRows.map(v => v.every(v => v === 1) ? Array(10).fill(3) : v))),
                 })
             }
         default:
